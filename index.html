@@ -909,6 +909,321 @@
 
   <p>[Insert GifyLink or QR Code Here]</p>
 
+    // Add this script at the end of your well widget HTML
+<script>
+    // Namespaced to avoid conflicts
+    var WellWidget = (function() {
+        // Configuration
+        const config = {
+            donateUrl: 'https://example.com/donate', // Replace with actual donation URL
+            goalAmount: 10000,
+            currentAmount: 3125, // Already raised amount ($)
+            percentComplete: 31.25, // % of goal reached
+            milestoneAmount: 4320, // Current milestone - 30 feet (360 inches) × $12/inch
+            milestoneProgress: 2496, // Amount raised toward milestone
+            emojiRotationInterval: 2500 // Time between emoji changes in ms
+        };
+        
+        // State
+        let state = {
+            selectedOption: null,
+            customAmount: 50,
+            inches: 0,
+            donorName: '',
+            currentEmojiIndex: 0,
+            isRecurring: false
+        };
+        
+        // Initialize
+        function init() {
+            // Get main elements
+            const emojiButton = document.getElementById('wellEmojiButton');
+            const mainPopup = document.getElementById('wellPopup');
+            const thankPopup = document.getElementById('wellThankPopup');
+            const closeMainButton = document.getElementById('wellClosePopup');
+            const closeThankButton = document.getElementById('wellThankCloseButton');
+            const donateButton = document.getElementById('wellDonateButton');
+            const recurringButton = document.getElementById('wellRecurringButton');
+            const customAmountInput = document.getElementById('customAmount');
+            const donorNameInput = document.getElementById('donorName');
+            const tabButtons = document.querySelectorAll('.well-tab-button');
+            
+            // Set initial progress values
+            updateWellProgress();
+            updateMilestoneProgress();
+            
+            // Add event listeners
+            emojiButton.addEventListener('click', () => {
+                thankPopup.classList.remove('active');
+                mainPopup.classList.toggle('active');
+            });
+            
+            closeMainButton.addEventListener('click', () => {
+                mainPopup.classList.remove('active');
+            });
+            
+            closeThankButton.addEventListener('click', () => {
+                thankPopup.classList.remove('active');
+            });
+            
+            donateButton.addEventListener('click', processDonation);
+            
+            recurringButton.addEventListener('click', () => {
+                state.isRecurring = !state.isRecurring;
+                recurringButton.classList.toggle('active');
+                
+                if (state.isRecurring) {
+                    recurringButton.textContent = "✓ Monthly Donation";
+                } else {
+                    recurringButton.textContent = "Make it Monthly";
+                }
+            });
+            
+            customAmountInput.addEventListener('input', () => {
+                state.customAmount = parseFloat(customAmountInput.value) || 0;
+                updateDonateButtonText();
+            });
+            
+            donorNameInput.addEventListener('input', () => {
+                state.donorName = donorNameInput.value.trim();
+            });
+            
+            // Tab functionality
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+            
+            // Close popups when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!emojiButton.contains(event.target) && 
+                    !document.querySelector('.well-i-indicator').contains(event.target) &&
+                    !mainPopup.contains(event.target) &&
+                    !thankPopup.contains(event.target)) {
+                    mainPopup.classList.remove('active');
+                    thankPopup.classList.remove('active');
+                }
+            });
+            
+            // Set default selection
+            selectOption('inch12');
+            
+            // Start emoji rotation
+            startEmojiRotation();
+        }
+        
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Update tab buttons
+            document.querySelectorAll('.well-tab-button').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+            });
+            
+            // Update tab contents
+            document.querySelectorAll('.well-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabId + 'Tab').classList.add('active');
+            
+            // Track tab change
+            trackEvent('tab_changed', { tab: tabId });
+        }
+        
+        // Start rotating emojis
+        function startEmojiRotation() {
+            const emojis = document.querySelectorAll('.well-rotating-emoji');
+            
+            // Set first emoji as active initially
+            emojis[0].classList.add('active');
+            
+            // Rotate emojis at specified interval
+            setInterval(() => {
+                // Remove active class from current emoji
+                emojis[state.currentEmojiIndex].classList.remove('active');
+                
+                // Update index
+                state.currentEmojiIndex = (state.currentEmojiIndex + 1) % emojis.length;
+                
+                // Add active class to new emoji
+                emojis[state.currentEmojiIndex].classList.add('active');
+            }, config.emojiRotationInterval);
+        }
+        
+        // Select donation option
+        function selectOption(option) {
+            // Update state
+            state.selectedOption = option;
+            
+            // Update inches based on option
+            switch(option) {
+                case 'inch1':
+                    state.inches = 1;
+                    break;
+                case 'inch6':
+                    state.inches = 6;
+                    break;
+                case 'inch12':
+                    state.inches = 12;
+                    break;
+                case 'inch24':
+                    state.inches = 24;
+                    break;
+                case 'custom':
+                    // Calculate inches based on amount
+                    state.inches = Math.floor(state.customAmount / 13);
+                    break;
+            }
+            
+            // Update UI
+            const options = document.querySelectorAll('.well-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            const selectedOption = document.getElementById(option + 'Option');
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // Show/hide custom amount input
+            const customAmountContainer = document.getElementById('customAmountContainer');
+            if (option === 'custom') {
+                customAmountContainer.classList.add('active');
+            } else {
+                customAmountContainer.classList.remove('active');
+            }
+            
+            // Update button text
+            updateDonateButtonText();
+            
+            // Track selection
+            trackEvent('option_selected', { option: option, inches: state.inches });
+        }
+        
+        // Update donate button text
+        function updateDonateButtonText() {
+            const donateButton = document.getElementById('wellDonateButton');
+            
+            if (state.selectedOption === 'custom') {
+                state.inches = Math.floor(state.customAmount / 13);
+                donateButton.textContent = `Sponsor ${state.inches} Inch${state.inches !== 1 ? 'es' : ''} ($${state.customAmount})`;
+            } else {
+                let amount = state.inches * 13;
+                donateButton.textContent = `Sponsor ${state.inches} Inch${state.inches !== 1 ? 'es' : ''} ($${amount})`;
+            }
+        }
+        
+        // Update the well depth visualization
+        function updateWellProgress() {
+            const depthFilled = document.getElementById('wellDepthFilled');
+            const depthLabel = document.getElementById('wellDepthLabel');
+            const percentComplete = Math.min(100, config.percentComplete);
+            
+            if (depthFilled) {
+                depthFilled.style.height = percentComplete + '%';
+                depthLabel.textContent = Math.floor(percentComplete / 100 * 65) + ' ft';
+            }
+        }
+        
+        // Update the milestone progress bar
+        function updateMilestoneProgress() {
+            const progressFill = document.getElementById('milestoneProgressFill');
+            const progressText = document.getElementById('milestoneProgressText');
+            
+            if (progressFill && progressText) {
+                const percent = Math.min(100, Math.round((config.milestoneProgress / config.milestoneAmount) * 100));
+                progressFill.style.width = percent + '%';
+                progressText.textContent = percent + '%';
+            }
+        }
+        
+        // Process donation
+        function processDonation() {
+            // Validate
+            if (state.inches <= 0) {
+                showToast('Please select inches to sponsor');
+                return;
+            }
+            
+            const amount = state.selectedOption === 'custom' ? state.customAmount : (state.inches * 13);
+            const donorName = state.donorName || 'Anonymous';
+            
+            // In a real implementation, this would redirect to your donation page
+            // For demo, we'll show the thank you popup
+            
+            // Update certificate
+            document.getElementById('wellCertificateName').textContent = donorName;
+            document.getElementById('wellCertificateInches').textContent = `${state.inches} inch${state.inches !== 1 ? 'es' : ''}`;
+            
+            // Update thank you message
+            const recurringText = state.isRecurring ? ' monthly' : '';
+            document.getElementById('wellThankMessage').textContent = 
+                `Thank you for your${recurringText} donation of $${amount} to sponsor ${state.inches} inch${state.inches !== 1 ? 'es' : ''} of the Agape Well Project. Your support will help bring sustainable water to farmers.`;
+            
+            // Show thank you popup
+            document.getElementById('wellPopup').classList.remove('active');
+            document.getElementById('wellThankPopup').classList.add('active');
+            
+            // Track donation
+            trackEvent('donation_completed', { 
+                amount: amount,
+                inches: state.inches,
+                recurring: state.isRecurring,
+                donor_name: donorName
+            });
+            
+            // In a real implementation, we would also redirect to payment
+            // window.open(buildDonationUrl(), '_blank');
+        }
+        
+        // Build donation URL with parameters
+        function buildDonationUrl() {
+            const amount = state.selectedOption === 'custom' ? state.customAmount : (state.inches * 13);
+            const donateUrl = new URL(config.donateUrl);
+            
+            donateUrl.searchParams.append('amount', amount);
+            donateUrl.searchParams.append('inches', state.inches);
+            donateUrl.searchParams.append('recurring', state.isRecurring ? 'monthly' : 'one-time');
+            if (state.donorName) {
+                donateUrl.searchParams.append('name', state.donorName);
+            }
+            donateUrl.searchParams.append('source', 'well_widget');
+            
+            return donateUrl.toString();
+        }
+        
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('wellToast');
+            toast.textContent = message;
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+        
+        // Analytics tracking
+        function trackEvent(action, data = {}) {
+            // Here you would integrate with your analytics platform
+            console.log('TRACK:', action, data);
+            
+            // Example Google Analytics integration
+            if (typeof gtag !== 'undefined') {
+                gtag('event', action, data);
+            }
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', init);
+        
+        // Public API
+        return {
+            selectOption: selectOption,
+            switchTab: switchTab
+        };
+    })();
+</script>
 </body>
 </html>
 
