@@ -1,0 +1,914 @@
+<!-- ROTATING EMOJI WELL WIDGET - RIGHT SIDE FLOATING -->
+<!-- Copy and paste this entire code into your website -->
+
+<div class="well-widget">
+    <div class="well-button-container">
+        <button class="well-emoji-button" id="wellEmojiButton">
+            <div class="well-emoji-circle">
+                <!-- Rotating emojis will appear here -->
+                <span class="well-rotating-emoji active" id="emoji1">👨‍🌾</span>
+                <span class="well-rotating-emoji" id="emoji2">💧</span>
+                <span class="well-rotating-emoji" id="emoji3">🌱</span>
+                <span class="well-rotating-emoji" id="emoji4">🚜</span>
+                <span class="well-rotating-emoji" id="emoji5">🙏</span>
+                <span class="well-rotating-emoji" id="emoji6">😊</span>
+            </div>
+            <!-- i indicator now outside the overflow:hidden container -->
+        </button>
+        <!-- i indicator moved here so it's not affected by overflow:hidden -->
+        <div class="well-i-indicator">i</div>
+        
+        <div class="well-popup" id="wellPopup">
+            <div class="well-popup-header">
+                <h3 class="well-popup-title">Help Our Farmers 👨‍🌾</h3>
+                <p class="well-popup-subtitle">Support the well project</p>
+                <button class="well-close-popup" id="wellClosePopup">&times;</button>
+            </div>
+            
+            <div class="well-options">
+                <div class="well-option" id="fiveOption" onclick="WellWidget.selectOption('five')">
+                    <div class="well-option-icon">💧</div>
+                    <div class="well-option-content">
+                        <h4>Quick $5 Donation</h4>
+                        <p>Help bring water to Agape farming community</p>
+                    </div>
+                    <div class="well-check"></div>
+                </div>
+                
+                <div class="well-option" id="inchOption" onclick="WellWidget.selectOption('inch')">
+                    <div class="well-option-icon">📏</div>
+                    <div class="well-option-content">
+                        <h4>Sponsor 1 Inch ($13)</h4>
+                        <p>Help dig one inch of our community well</p>
+                    </div>
+                    <div class="well-check"></div>
+                </div>
+                
+                <div class="well-option" id="customOption" onclick="WellWidget.selectOption('custom')">
+                    <div class="well-option-icon">🌱</div>
+                    <div class="well-option-content">
+                        <h4>Custom Amount</h4>
+                        <p>Choose your own donation amount</p>
+                    </div>
+                    <div class="well-check"></div>
+                </div>
+            </div>
+            
+            <div class="well-custom-input" id="customAmountContainer">
+                <label for="customAmount">Enter amount:</label>
+                <div class="well-input-container">
+                    <span class="well-currency">$</span>
+                    <input type="number" id="customAmount" min="1" placeholder="Amount" value="10">
+                </div>
+            </div>
+            
+            <div class="well-progress">
+                <div class="well-progress-bar">
+                    <div class="well-progress-fill" id="wellProgressFill"></div>
+                </div>
+                <div class="well-progress-text">
+                    <span id="wellProgressText">0%</span> of our $10,000 goal
+                </div>
+            </div>
+            
+            <button class="well-donate-button" id="wellDonateButton">
+                Donate Now
+            </button>
+            
+            <div class="well-footer">
+                <button class="well-info-button" id="wellInfoButton">
+                    Learn how this helps farmers 👨‍🌾
+                </button>
+            </div>
+        </div>
+        
+        <div class="well-info-popup" id="wellInfoPopup">
+            <div class="well-popup-header">
+                <h3 class="well-popup-title">Supporting Farmers 👨‍🌾</h3>
+                <button class="well-close-popup" id="wellInfoCloseButton">&times;</button>
+            </div>
+            
+            <div class="well-info-content">
+                <p>Your donation helps dig a well at the Agape land to support local farmers during drought seasons. With water available 65 feet underground, this well will transform agriculture in the community. 🌱</p>
+                
+                <div class="well-farmer-impact">
+                    <h4>How This Helps Farmers:</h4>
+                    <ul>
+                        <li>🌞 Reliable water during dry seasons</li>
+                        <li>🥕 Year-round vegetable production</li>
+                        <li>📚 Enhanced agricultural training</li>
+                        <li>🍽️ Improved food security</li>
+                        <li>🌍 Sustainable farming practices</li>
+                    </ul>
+                </div>
+                
+                <div class="well-info-stats">
+                    <div class="well-stat">
+                        <div class="well-stat-number" id="wellDonorsCount">24</div>
+                        <div class="well-stat-label">Donors</div>
+                    </div>
+                    <div class="well-stat">
+                        <div class="well-stat-number" id="wellRaisedAmount">$3,125</div>
+                        <div class="well-stat-label">Raised</div>
+                    </div>
+                    <div class="well-stat">
+                        <div class="well-stat-number" id="wellInchesCount">240</div>
+                        <div class="well-stat-label">Inches</div>
+                    </div>
+                </div>
+                
+                <div class="well-farmer-quote">
+                    <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23f6f6f6'/%3E%3Cpath d='M50 10c-22 0-40 18-40 40s18 40 40 40 40-18 40-40-18-40-40-40zm0 75c-19.3 0-35-15.7-35-35s15.7-35 35-35 35 15.7 35 35-15.7 35-35 35z' fill='%23ddd'/%3E%3Cpath d='M35 40c0-8.3 6.7-15 15-15s15 6.7 15 15c0 8.3-6.7 15-15 15s-15-6.7-15-15zM70 75H30c0-11 9-20 20-20s20 9 20 20z' fill='%23ddd'/%3E%3C/svg%3E" class="well-farmer-icon" alt="Farmer">
+                    <p>"Water is the foundation of everything we do. This well will allow us to grow crops all year and teach the next generation of farmers."</p>
+                </div>
+                
+                <button class="well-donate-button" onclick="WellWidget.backToOptions()">
+                    Support Our Farmers
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="well-toast" id="wellToast"></div>
+
+<style>
+    /* Widget Styling - Self-contained to avoid conflicts */
+    .well-widget {
+        --well-primary: #0074d9;
+        --well-primary-light: #4192e9;
+        --well-primary-dark: #0062b3;
+        --well-text: #333;
+        --well-text-light: #666;
+        --well-bg: #fff;
+        --well-bg-light: #f5f7fa;
+        --well-success: #28a745;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--well-text);
+        box-sizing: border-box;
+    }
+
+    .well-widget *,
+    .well-widget *:before,
+    .well-widget *:after {
+        box-sizing: inherit;
+    }
+
+    /* Button Container - Fixed on RIGHT side */
+    .well-button-container {
+        position: fixed;
+        top: 50%;
+        right: 20px; /* Position on RIGHT side */
+        transform: translateY(-50%);
+        z-index: 9998;
+    }
+
+    /* Main Emoji Button */
+    .well-emoji-button {
+        background: var(--well-bg);
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        position: relative;
+        transition: transform 0.2s, box-shadow 0.2s;
+        padding: 0;
+        overflow: hidden; /* Hide overflowing emoji parts */
+    }
+
+    .well-emoji-button:hover {
+        transform: translateX(-2px); /* Move left instead of right when on right side */
+        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Emoji Circle Container */
+    .well-emoji-circle {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    /* Rotating Emojis */
+    .well-rotating-emoji {
+        position: absolute;
+        font-size: 28px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        transform: scale(0.5);
+        animation: scaleUp 0.5s forwards;
+    }
+
+    .well-rotating-emoji.active {
+        opacity: 1;
+    }
+
+    @keyframes scaleUp {
+        from { transform: scale(0.5); }
+        to { transform: scale(1); }
+    }
+
+    /* 'i' Indicator - Positioned relative to button container, not the button itself */
+    .well-i-indicator {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: var(--well-primary);
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-style: italic;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 2;
+    }
+
+    /* Popup Dialog - Positioned to the LEFT of the button when on right side */
+    .well-popup, .well-info-popup {
+        position: absolute;
+        top: 50%;
+        right: 75px; /* Position to the left of the button */
+        transform: translateY(-50%);
+        background: var(--well-bg);
+        width: 320px;
+        border-radius: 12px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+        z-index: 9999;
+        display: none;
+        overflow: hidden;
+    }
+
+    /* Arrow pointing to button - pointing right instead of left */
+    .well-popup:before, .well-info-popup:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -10px; /* Position on right side */
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid white; /* Border on left instead of right */
+        border-right: none; /* Remove right border */
+        z-index: 1;
+    }
+
+    .well-popup.active, .well-info-popup.active {
+        display: block;
+        animation: wellFadeIn 0.25s ease-out;
+    }
+
+    @keyframes wellFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Popup Header */
+    .well-popup-header {
+        background: var(--well-primary);
+        color: white;
+        padding: 15px;
+        position: relative;
+    }
+
+    .well-popup-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .well-popup-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-top: 5px;
+    }
+
+    .well-close-popup {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+
+    .well-close-popup:hover {
+        opacity: 1;
+    }
+
+    /* Options */
+    .well-options {
+        padding: 15px;
+    }
+
+    .well-option {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background: var(--well-bg-light);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+
+    .well-option:hover {
+        background: #edf5ff;
+    }
+
+    .well-option.selected {
+        border-color: var(--well-primary);
+        background: #edf5ff;
+    }
+
+    .well-option-icon {
+        font-size: 24px;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .well-option-content {
+        flex-grow: 1;
+    }
+
+    .well-option-content h4 {
+        margin: 0 0 5px 0;
+        font-size: 16px;
+    }
+
+    .well-option-content p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--well-text-light);
+    }
+
+    .well-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        margin-left: 10px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .well-option.selected .well-check {
+        border-color: var(--well-primary);
+        background: var(--well-primary);
+    }
+
+    .well-option.selected .well-check:after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 6px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    /* Custom Amount Input */
+    .well-custom-input {
+        padding: 0 15px 15px;
+        display: none;
+    }
+
+    .well-custom-input.active {
+        display: block;
+        animation: wellFadeIn 0.3s;
+    }
+
+    .well-custom-input label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .well-input-container {
+        position: relative;
+    }
+
+    .well-currency {
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        transform: translateY(-50%);
+        font-weight: 500;
+    }
+
+    .well-custom-input input {
+        width: 100%;
+        padding: 10px 10px 10px 25px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    .well-custom-input input:focus {
+        outline: none;
+        border-color: var(--well-primary);
+    }
+
+    /* Progress Bar */
+    .well-progress {
+        padding: 0 15px 15px;
+    }
+
+    .well-progress-bar {
+        height: 10px;
+        background: #e9ecef;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 8px;
+    }
+
+    .well-progress-fill {
+        height: 100%;
+        background: var(--well-primary);
+        width: 31.25%;
+        transition: width 1s ease;
+    }
+
+    .well-progress-text {
+        font-size: 12px;
+        color: var(--well-text-light);
+        text-align: right;
+    }
+
+    /* Donate Button */
+    .well-donate-button {
+        display: block;
+        width: calc(100% - 30px);
+        margin: 0 15px 15px;
+        padding: 12px;
+        background: var(--well-primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .well-donate-button:hover {
+        background: var(--well-primary-dark);
+    }
+
+    /* Footer */
+    .well-footer {
+        padding: 0 15px 15px;
+        text-align: center;
+    }
+
+    .well-info-button {
+        background: none;
+        border: none;
+        color: var(--well-primary);
+        font-size: 14px;
+        cursor: pointer;
+        transition: color 0.2s;
+        text-decoration: underline;
+        padding: 0;
+    }
+
+    .well-info-button:hover {
+        color: var(--well-primary-dark);
+    }
+
+    /* Info Popup */
+    .well-info-content {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .well-info-content p {
+        margin-bottom: 15px;
+    }
+
+    .well-farmer-impact {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .well-farmer-impact h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .well-farmer-impact ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .well-farmer-impact li {
+        margin-bottom: 8px;
+    }
+
+    .well-info-stats {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .well-stat {
+        flex: 1;
+    }
+
+    .well-stat-number {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--well-primary);
+    }
+
+    .well-stat-label {
+        font-size: 12px;
+        color: var(--well-text-light);
+    }
+
+    .well-farmer-quote {
+        display: flex;
+        align-items: center;
+        background: #f5f9ff;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+
+    .well-farmer-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .well-farmer-quote p {
+        margin: 0;
+        font-style: italic;
+        font-size: 13px;
+        color: #555;
+    }
+
+    /* Toast notification */
+    .well-toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-size: 14px;
+        z-index: 10000;
+        display: none;
+    }
+
+    .well-toast.active {
+        display: block;
+        animation: wellFadeInOut 3s forwards;
+    }
+
+    @keyframes wellFadeInOut {
+        0% { opacity: 0; transform: translate(-50%, -10px); }
+        15% { opacity: 1; transform: translate(-50%, 0); }
+        85% { opacity: 1; transform: translate(-50%, 0); }
+        100% { opacity: 0; transform: translate(-50%, -10px); }
+    }
+
+    /* Pulse animation for attention */
+    @keyframes wellPulse {
+        0% { box-shadow: 0 0 0 0 rgba(0, 116, 217, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(0, 116, 217, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 116, 217, 0); }
+    }
+
+    /* Apply pulse animation to button */
+    .well-emoji-button {
+        animation: wellPulse 2s infinite;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 400px) {
+        .well-popup, .well-info-popup {
+            width: 280px;
+        }
+    }
+</style>
+
+<script>
+    // Namespaced to avoid conflicts
+    var WellWidget = (function() {
+        // Configuration
+        const config = {
+            donateUrl: 'https://example.com/donate', // Replace with actual donation URL
+            goalAmount: 10000,
+            currentAmount: 3125, // Already raised amount ($)
+            percentComplete: 31.25, // % of goal reached
+            emojiRotationInterval: 2500 // Time between emoji changes in ms
+        };
+        
+        // State
+        let state = {
+            selectedOption: null,
+            customAmount: 10,
+            currentEmojiIndex: 0
+        };
+        
+        // Initialize
+        function init() {
+            // Get main elements
+            const emojiButton = document.getElementById('wellEmojiButton');
+            const optionsPopup = document.getElementById('wellPopup');
+            const infoPopup = document.getElementById('wellInfoPopup');
+            const closeOptionsButton = document.getElementById('wellClosePopup');
+            const closeInfoButton = document.getElementById('wellInfoCloseButton');
+            const donateButton = document.getElementById('wellDonateButton');
+            const infoButton = document.getElementById('wellInfoButton');
+            const customAmountInput = document.getElementById('customAmount');
+            const customAmountContainer = document.getElementById('customAmountContainer');
+            
+            // Set progress bar
+            document.getElementById('wellProgressFill').style.width = config.percentComplete + '%';
+            document.getElementById('wellProgressText').textContent = config.percentComplete + '%';
+            
+            // Add event listeners
+            emojiButton.addEventListener('click', () => {
+                infoPopup.classList.remove('active');
+                optionsPopup.classList.toggle('active');
+            });
+            
+            closeOptionsButton.addEventListener('click', () => {
+                optionsPopup.classList.remove('active');
+            });
+            
+            closeInfoButton.addEventListener('click', () => {
+                infoPopup.classList.remove('active');
+            });
+            
+            infoButton.addEventListener('click', () => {
+                optionsPopup.classList.remove('active');
+                infoPopup.classList.add('active');
+            });
+            
+            donateButton.addEventListener('click', processDonation);
+            
+            customAmountInput.addEventListener('input', () => {
+                state.customAmount = parseFloat(customAmountInput.value) || 0;
+                updateDonateButtonText();
+            });
+            
+            // Close popups when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!emojiButton.contains(event.target) && 
+                    !document.querySelector('.well-i-indicator').contains(event.target) &&
+                    !optionsPopup.contains(event.target) &&
+                    !infoPopup.contains(event.target)) {
+                    optionsPopup.classList.remove('active');
+                    infoPopup.classList.remove('active');
+                }
+            });
+            
+            // Set default selection
+            selectOption('five');
+            
+            // Start emoji rotation
+            startEmojiRotation();
+        }
+        
+        // Start rotating emojis inside the main button
+        function startEmojiRotation() {
+            const emojis = document.querySelectorAll('.well-rotating-emoji');
+            
+            // Set first emoji as active initially
+            emojis[0].classList.add('active');
+            
+            // Rotate emojis at specified interval
+            setInterval(() => {
+                // Remove active class from current emoji
+                emojis[state.currentEmojiIndex].classList.remove('active');
+                
+                // Update index
+                state.currentEmojiIndex = (state.currentEmojiIndex + 1) % emojis.length;
+                
+                // Add active class to new emoji
+                emojis[state.currentEmojiIndex].classList.add('active');
+            }, config.emojiRotationInterval);
+        }
+        
+        // Select donation option
+        function selectOption(option) {
+            // Update state
+            state.selectedOption = option;
+            
+            // Update UI
+            const options = document.querySelectorAll('.well-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            document.getElementById(option + 'Option').classList.add('selected');
+            
+            // Show/hide custom amount input
+            const customAmountContainer = document.getElementById('customAmountContainer');
+            if (option === 'custom') {
+                customAmountContainer.classList.add('active');
+            } else {
+                customAmountContainer.classList.remove('active');
+            }
+            
+            // Update button text
+            updateDonateButtonText();
+        }
+        
+        // Update donate button text based on selection
+        function updateDonateButtonText() {
+            const donateButton = document.getElementById('wellDonateButton');
+            
+            switch(state.selectedOption) {
+                case 'five':
+                    donateButton.textContent = 'Donate $5 Now';
+                    break;
+                case 'inch':
+                    donateButton.textContent = 'Sponsor 1 Inch ($13)';
+                    break;
+                case 'custom':
+                    donateButton.textContent = `Donate $${state.customAmount} Now`;
+                    break;
+                default:
+                    donateButton.textContent = 'Donate Now';
+            }
+        }
+        
+        // Process donation
+        function processDonation() {
+            let amount = 0;
+            let description = '';
+            
+            // Determine amount based on selection
+            switch(state.selectedOption) {
+                case 'five':
+                    amount = 5;
+                    description = 'Quick $5 Donation';
+                    break;
+                case 'inch':
+                    amount = 13;
+                    description = 'Sponsor 1 Inch';
+                    break;
+                case 'custom':
+                    amount = state.customAmount;
+                    description = 'Custom Donation';
+                    break;
+            }
+            
+            // Validate amount
+            if (amount <= 0) {
+                showToast('Please enter a valid amount');
+                return;
+            }
+            
+            // In a real implementation, this would redirect to your donation page
+            // with the amount and description prefilled
+            
+            // Build donation URL with parameters
+            const donateUrl = new URL(config.donateUrl);
+            donateUrl.searchParams.append('amount', amount);
+            donateUrl.searchParams.append('description', description);
+            donateUrl.searchParams.append('source', 'emoji_widget');
+            
+            // Open donation page in new tab
+            window.open(donateUrl.toString(), '_blank');
+            
+            // Show confirmation
+            showToast(`Thank you for your $${amount} donation!`);
+            
+            // Close popup after a delay
+            setTimeout(() => {
+                document.getElementById('wellPopup').classList.remove('active');
+            }, 2000);
+        }
+        
+        // Switch from info back to options
+        function backToOptions() {
+            document.getElementById('wellInfoPopup').classList.remove('active');
+            document.getElementById('wellPopup').classList.add('active');
+        }
+        
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('wellToast');
+            toast.textContent = message;
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', init);
+        
+        // Public API
+        return {
+            selectOption: selectOption,
+            backToOptions: backToOptions
+        };
+    })();
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digging Deeper – A Well of Hope for Agape</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    p {
+      margin-bottom: 20px;
+    }
+    ul {
+      margin: 10px 0 20px 20px;
+    }
+    strong {
+      color: #2c3e50;
+    }
+    .cta {
+      font-size: 1.1em;
+      font-weight: bold;
+      background-color: #eaf6ff;
+      padding: 15px;
+      border-left: 4px solid #3498db;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Digging Deeper – A Well of Hope for Agape</h1>
+
+  <p>In a quiet corner of the Agape land, the soil is dry but full of promise. Every season, students and staff from the local agricultural training college gather here—not just to grow crops, but to grow futures.</p>
+
+  <p>Yet, one vital resource remains out of reach: <strong>water</strong>.</p>
+
+  <p>Without a reliable well, farming is impossible during the dry season. Droughts steal the harvest, training is halted, and the community’s food supply hangs in the balance.</p>
+
+  <p>But there’s hope—just <strong>65 feet below</strong> the surface.</p>
+
+  <p>For <strong>$10,000</strong>, we can install a submersible pump and dig a well that transforms this land into a year-round source of growth. This well will:</p>
+  <ul>
+    <li>Shield crops and training programs from drought,</li>
+    <li>Sustain staff and students through harvest,</li>
+    <li>And empower farmers across villages through hands-on education.</li>
+  </ul>
+
+  <p>But water is only the beginning.</p>
+
+  <p>We also need your help to cover:</p>
+  <ul>
+    <li><strong>Staff support</strong> – $700/month for a small team leading the project and mentoring future farmers,</li>
+    <li><strong>Machinery upgrades</strong> – $2,000 to get a new planter operational,</li>
+    <li><strong>Travel and accommodations</strong> – $4,000 per trip for essential visits during planting seasons.</li>
+  </ul>
+
+  <div class="cta">
+    Each contribution doesn’t just build infrastructure—it builds <strong>independence</strong>, <strong>education</strong>, and <strong>resilience</strong>.
+    <br><br>
+    <strong>Partner with us. Be part of the harvest. Help us dig a well of hope.</strong>
+  </div>
+
+  <p>[Insert GifyLink or QR Code Here]</p>
+
+</body>
+</html>
+
