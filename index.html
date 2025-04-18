@@ -1,3 +1,1172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTabs Generator</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4338ca;
+            --bg-light: #f4f7f9;
+            --text-dark: #333;
+            --border-color: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .form-section, .preview-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .form-section {
+            flex: 1;
+        }
+        
+        .preview-section {
+            flex: 1;
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--primary-dark);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input[type="text"], input[type="url"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .hint {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .color-option.active {
+            border-color: var(--text-dark);
+        }
+        
+        .tab-inputs {
+            margin-bottom: 20px;
+        }
+        
+        .tab-input {
+            background: #f8fafc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        button:hover {
+            background: var(--primary-dark);
+        }
+        
+        .add-tab-btn {
+            background: #34a853;
+        }
+        
+        .add-tab-btn:hover {
+            background: #2d8a46;
+        }
+        
+        .update-button {
+            background: #6366f1;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .update-button:hover {
+            background: #4338ca;
+        }
+        
+        .update-images-button {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .update-images-button:hover {
+            background: #2563eb;
+        }
+        
+        .generate-code-button {
+            background: #8b5cf6;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .generate-code-button:hover {
+            background: #7c3aed;
+        }
+        
+        .code-output-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .code-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #4338ca;
+        }
+        
+        .code-area {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .code-display {
+            width: 100%;
+            min-height: 200px;
+            max-height: 400px;
+            padding: 15px;
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .copy-code-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .copy-code-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .installation-guide {
+            margin-top: 15px;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #8b5cf6;
+        }
+        
+        .installation-guide h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #4338ca;
+        }
+        
+        /* iTabs Preview Styles */
+        .preview-container {
+            margin-top: 20px;
+            border: 3px solid var(--primary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .trigger-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            font-style: italic;
+        }
+        
+        .itabs-container {
+            background: white;
+        }
+        
+        .itabs-tabs {
+            display: flex;
+            background-color: #f1f5f9;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .itab {
+            padding: 15px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .itab:hover {
+            color: var(--primary-color);
+        }
+        
+        .itab.active {
+            color: var(--primary-color);
+            background: white;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .itab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.5s;
+        }
+        
+        .itab-content.active {
+            display: block;
+        }
+        
+        .tab-image {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .itabs-link-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>iTabs Generator</h1>
+            <p class="subtitle">Create interactive, tabbed content that enhances user experience without disrupting flow</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="form-section">
+                <h2>Create Your iTabs</h2>
+                
+                <div class="input-group">
+                    <label for="triggerIcon">Trigger Icon</label>
+                    <input type="text" id="triggerIcon" value="i" placeholder="Enter trigger icon (e.g., i, ?, ℹ️)">
+                    <p class="hint">This is the icon that users will click to open your iTabs</p>
+                </div>
+                
+                <div class="tab-inputs" id="tabInputs">
+                    <!-- Tab 1 -->
+                    <div class="tab-input">
+                        <div class="input-group">
+                            <label for="tab1Title">Tab 1 Title</label>
+                            <input type="text" id="tab1Title" value="What are iTabs?" placeholder="Enter tab title...">
+                        </div>
+                        <div class="input-group">
+                            <label for="tab1Content">Tab 1 Content</label>
+                            <textarea id="tab1Content" placeholder="Enter tab content...">iTabs are interactive information displays that enhance your content with contextual explanations. They help readers understand complex information without leaving the page or disrupting their reading flow.</textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="tab1Image">Tab 1 Image URL (optional)</label>
+                            <input type="url" id="tab1Image" placeholder="Enter image URL..." value="https://via.placeholder.com/600x300">
+                            <p class="hint">Sample image URL: https://via.placeholder.com/600x300</p>
+                            <p class="hint">If you paste a URL and it doesn't appear, click the "Update Images Only" button below</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab 2 -->
+                    <div class="tab-input">
+                        <div class="input-group">
+                            <label for="tab2Title">Tab 2 Title</label>
+                            <input type="text" id="tab2Title" value="Benefits" placeholder="Enter tab title...">
+                        </div>
+                        <div class="input-group">
+                            <label for="tab2Content">Tab 2 Content</label>
+                            <textarea id="tab2Content" placeholder="Enter tab content...">• Immediate clarification of unfamiliar terms
+• Maintains reading context and flow
+• Reduces cognitive load of switching between pages
+• Improves overall comprehension
+• Enhances user engagement with your content</textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="tab2Image">Tab 2 Image URL (optional)</label>
+                            <input type="url" id="tab2Image" placeholder="Enter image URL..." value="https://via.placeholder.com/600x300/6366f1/ffffff?text=Benefits+of+iTabs">
+                            <p class="hint">Images will appear below the text content in each tab</p>
+                            <p class="hint">Try pasting a new URL and clicking "Update Images Only" if it doesn't update automatically</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab 3 will be added dynamically -->
+                </div>
+                
+                <button id="addTabBtn" class="add-tab-btn">+ Add Another Tab</button>
+                
+                <div class="input-group">
+                    <label for="buttonText">Button Text (optional)</label>
+                    <input type="text" id="buttonText" value="Learn More" placeholder="Enter button text...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="buttonUrl">Button URL (optional)</label>
+                    <input type="url" id="buttonUrl" value="#" placeholder="Enter URL...">
+                </div>
+                
+                <div class="input-group">
+                    <label>Primary Color</label>
+                    <div class="color-picker">
+                        <div class="color-option active" style="background-color: #6366f1;" data-color="#6366f1"></div>
+                        <div class="color-option" style="background-color: #3b82f6;" data-color="#3b82f6"></div>
+                        <div class="color-option" style="background-color: #10b981;" data-color="#10b981"></div>
+                        <div class="color-option" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                        <div class="color-option" style="background-color: #8b5cf6;" data-color="#8b5cf6"></div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Border Style</label>
+                    <select id="borderStyle">
+                        <option value="solid">Solid</option>
+                        <option value="dashed">Dashed</option>
+                        <option value="dotted">Dotted</option>
+                        <option value="double">Double</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Border Width</label>
+                    <select id="borderWidth">
+                        <option value="1px">Thin (1px)</option>
+                        <option value="2px">Medium (2px)</option>
+                        <option value="3px" selected>Thick (3px)</option>
+                        <option value="4px">Extra Thick (4px)</option>
+                    </select>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="updatePreviewBtn" class="update-button">Update Preview</button>
+                    <button id="updateImagesBtn" class="update-images-button">Update Images Only</button>
+                    <button id="generateCodeBtn" class="generate-code-button">Generate Code</button>
+                </div>
+                
+                <div id="codeOutputContainer" class="code-output-container" style="display: none;">
+                    <div class="code-title">Your Custom iTabs Code</div>
+                    <div class="code-area">
+                        <pre id="codeDisplay" class="code-display"></pre>
+                        <button id="copyCodeBtn" class="copy-code-btn">Copy Code</button>
+                    </div>
+                    <div class="installation-guide">
+                        <h3>How to Use This Code</h3>
+                        <p>Copy and paste this code into your website's HTML. Place it where you want the iTabs to appear.</p>
+                        <p>This is a self-contained code snippet with all the necessary HTML, CSS, and JavaScript bundled together.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="preview-section">
+                <h2>Live Preview</h2>
+                <div class="preview-container">
+                    <div class="trigger-icon" id="triggerIconPreview">i</div>
+                    <div class="itabs-container">
+                        <div class="itabs-tabs">
+                            <button class="itab active" data-tab="tab1">What are iTabs?</button>
+                            <button class="itab" data-tab="tab2">Benefits</button>
+                        </div>
+                        
+                        <div id="tab1" class="itab-content active">
+                            <p>iTabs are interactive information displays that enhance your content with contextual explanations. They help readers understand complex information without leaving the page or disrupting their reading flow.</p>
+                            <img src="https://via.placeholder.com/600x300" alt="Tab image" class="tab-image">
+                        </div>
+                        
+                        <div id="tab2" class="itab-content">
+                            <p>• Immediate clarification of unfamiliar terms<br>
+                            • Maintains reading context and flow<br>
+                            • Reduces cognitive load of switching between pages<br>
+                            • Improves overall comprehension<br>
+                            • Enhances user engagement with your content</p>
+                            <img src="https://via.placeholder.com/600x300/6366f1/ffffff?text=Benefits+of+iTabs" alt="Tab image" class="tab-image">
+                        </div>
+                        
+                        <div class="itab-buttons">
+                            <a href="#" class="itabs-link-button">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let tabCount = 2;
+            const maxTabs = 5; // Increased from 3 to 5
+            let primaryColor = '#6366f1';
+            
+            // Elements
+            const tabInputs = document.getElementById('tabInputs');
+            const addTabBtn = document.getElementById('addTabBtn');
+            const tab1Title = document.getElementById('tab1Title');
+            const tab1Content = document.getElementById('tab1Content');
+            const tab1Image = document.getElementById('tab1Image');
+            const tab2Title = document.getElementById('tab2Title');
+            const tab2Content = document.getElementById('tab2Content');
+            const tab2Image = document.getElementById('tab2Image');
+            const buttonText = document.getElementById('buttonText');
+            const buttonUrl = document.getElementById('buttonUrl');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const borderStyle = document.getElementById('borderStyle');
+            const borderWidth = document.getElementById('borderWidth');
+            const triggerIcon = document.getElementById('triggerIcon');
+            const triggerIconPreview = document.getElementById('triggerIconPreview');
+            const updatePreviewBtn = document.getElementById('updatePreviewBtn');
+            const updateImagesBtn = document.getElementById('updateImagesBtn');
+            const generateCodeBtn = document.getElementById('generateCodeBtn');
+            const codeOutputContainer = document.getElementById('codeOutputContainer');
+            const codeDisplay = document.getElementById('codeDisplay');
+            const copyCodeBtn = document.getElementById('copyCodeBtn');
+            
+            // Preview elements
+            const itabsTabs = document.querySelector('.itabs-tabs');
+            const itabsLinkButton = document.querySelector('.itabs-link-button');
+            
+            // Add tab button functionality
+            addTabBtn.addEventListener('click', function() {
+                if (tabCount >= maxTabs) {
+                    alert('Maximum of 5 tabs allowed in this demo.');
+                    return;
+                }
+                
+                tabCount++;
+                
+                // Create new tab input fields
+                const newTabInput = document.createElement('div');
+                newTabInput.className = 'tab-input';
+                newTabInput.innerHTML = `
+                    <div class="input-group">
+                        <label for="tab${tabCount}Title">Tab ${tabCount} Title</label>
+                        <input type="text" id="tab${tabCount}Title" value="Implementation" placeholder="Enter tab title...">
+                    </div>
+                    <div class="input-group">
+                        <label for="tab${tabCount}Content">Tab ${tabCount} Content</label>
+                        <textarea id="tab${tabCount}Content" placeholder="Enter tab content...">Adding iTabs to your site is simple! Just use our generator to create your tabs, then copy and paste the provided code into your website.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="tab${tabCount}Image">Tab ${tabCount} Image URL (optional)</label>
+                        <input type="url" id="tab${tabCount}Image" placeholder="Enter image URL..." value="https://via.placeholder.com/600x300/10b981/ffffff?text=Implementation+Guide">
+                    </div>
+                `;
+                
+                tabInputs.appendChild(newTabInput);
+                
+                // Add new tab to preview
+                const newTab = document.createElement('button');
+                newTab.className = 'itab';
+                newTab.setAttribute('data-tab', `tab${tabCount}`);
+                newTab.textContent = 'Implementation';
+                itabsTabs.appendChild(newTab);
+                
+                // Add new content div
+                const newContent = document.createElement('div');
+                newContent.id = `tab${tabCount}`;
+                newContent.className = 'itab-content';
+                newContent.innerHTML = `
+                    <p>Adding iTabs to your site is simple! Just use our generator to create your tabs, then copy and paste the provided code into your website.</p>
+                    <img src="https://via.placeholder.com/600x300/10b981/ffffff?text=Implementation+Guide" alt="Tab image" class="tab-image">
+                `;
+                document.querySelector('.itab-buttons').insertAdjacentElement('beforebegin', newContent);
+                
+                // Add event listeners for new tab
+                const newTabTitle = document.getElementById(`tab${tabCount}Title`);
+                const newTabContent = document.getElementById(`tab${tabCount}Content`);
+                const newTabImage = document.getElementById(`tab${tabCount}Image`);
+                
+                newTabTitle.addEventListener('input', updatePreview);
+                newTabContent.addEventListener('input', updatePreview);
+                newTabImage.addEventListener('input', updatePreview);
+                newTabImage.addEventListener('change', function() {
+                    updateTabContent(`tab${tabCount}`, newTabContent.value, newTabImage.value);
+                });
+                
+                // Add click event for new tab in preview
+                newTab.addEventListener('click', function() {
+                    activateTab(this.getAttribute('data-tab'));
+                });
+                
+                // If this is the max number of tabs, disable the add button
+                if (tabCount >= maxTabs) {
+                    addTabBtn.disabled = true;
+                    addTabBtn.style.opacity = '0.5';
+                }
+                
+                updatePreview();
+            });
+            
+            // Tab switching in preview
+            document.querySelectorAll('.itab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    activateTab(this.getAttribute('data-tab'));
+                });
+            });
+            
+            // Color picker
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    primaryColor = this.getAttribute('data-color');
+                    updateColors();
+                });
+            });
+            
+            // Input event listeners for real-time preview updates
+            tab1Title.addEventListener('input', updatePreview);
+            tab1Content.addEventListener('input', updatePreview);
+            tab1Image.addEventListener('input', updatePreview);
+            tab1Image.addEventListener('change', function() {
+                updateTabContent('tab1', tab1Content.value, tab1Image.value);
+            });
+            tab2Title.addEventListener('input', updatePreview);
+            tab2Content.addEventListener('input', updatePreview);
+            tab2Image.addEventListener('input', updatePreview);
+            tab2Image.addEventListener('change', function() {
+                updateTabContent('tab2', tab2Content.value, tab2Image.value);
+            });
+            buttonText.addEventListener('input', updatePreview);
+            buttonUrl.addEventListener('input', updatePreview);
+            borderStyle.addEventListener('change', updateBorders);
+            borderWidth.addEventListener('change', updateBorders);
+            
+            // Input event listeners for real-time preview updates
+            triggerIcon.addEventListener('input', updateTriggerIcon);
+            updatePreviewBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                updatePreview();
+                updateBorders();
+                updateColors();
+                
+                // Show a temporary success message
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = "✓ Preview Updated!";
+                btn.style.backgroundColor = "#10b981";
+                
+                setTimeout(function() {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = "";
+                }, 1500);
+            });
+            
+            updateImagesBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                updateImages();
+                
+                // Show a temporary success message
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = "✓ Images Updated!";
+                btn.style.backgroundColor = "#10b981";
+                
+                setTimeout(function() {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = "";
+                }, 1500);
+            });
+            
+            // Generate Code button functionality
+            generateCodeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Generate the code
+                const generatedCode = generateCode();
+                
+                // Display the code
+                codeDisplay.textContent = generatedCode;
+                codeOutputContainer.style.display = 'block';
+                
+                // Scroll to code output
+                codeOutputContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                // Show a temporary success message
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = "✓ Code Generated!";
+                btn.style.backgroundColor = "#10b981";
+                
+                setTimeout(function() {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = "";
+                }, 1500);
+            });
+            
+            // Copy Code button functionality
+            copyCodeBtn.addEventListener('click', function() {
+                // Create a temporary textarea to copy from
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = codeDisplay.textContent;
+                document.body.appendChild(tempTextArea);
+                
+                // Select and copy the code
+                tempTextArea.select();
+                document.execCommand('copy');
+                
+                // Remove the temporary textarea
+                document.body.removeChild(tempTextArea);
+                
+                // Show a temporary success message
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = "✓ Copied!";
+                
+                setTimeout(function() {
+                    btn.textContent = originalText;
+                }, 1500);
+            });
+            
+            // Function to activate a tab in the preview
+            function activateTab(tabId) {
+                // Deactivate all tabs
+                document.querySelectorAll('.itab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.itab-content').forEach(c => c.classList.remove('active'));
+                
+                // Activate the selected tab
+                document.querySelector(`.itab[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            }
+            
+            // Function to update colors
+            function updateColors() {
+                document.querySelectorAll('.itab.active').forEach(tab => {
+                    tab.style.color = primaryColor;
+                    tab.style.borderBottomColor = primaryColor;
+                });
+                
+                document.querySelectorAll('.itab').forEach(tab => {
+                    tab.addEventListener('mouseenter', function() {
+                        if (!this.classList.contains('active')) {
+                            this.style.color = primaryColor;
+                        }
+                    });
+                    
+                    tab.addEventListener('mouseleave', function() {
+                        if (!this.classList.contains('active')) {
+                            this.style.color = '#64748b';
+                        }
+                    });
+                });
+                
+                itabsLinkButton.style.backgroundColor = primaryColor;
+                triggerIconPreview.style.backgroundColor = primaryColor;
+                document.querySelector('.preview-container').style.borderColor = primaryColor;
+                
+                // Update CSS variables
+                document.documentElement.style.setProperty('--primary-color', primaryColor);
+                
+                // Calculate a darker shade for hover effects
+                const darkerColor = adjustColor(primaryColor, -20);
+                document.documentElement.style.setProperty('--primary-dark', darkerColor);
+            }
+            
+            // Function to update the trigger icon
+            function updateTriggerIcon() {
+                triggerIconPreview.textContent = triggerIcon.value || 'i';
+            }
+            
+            // Function to update all images
+            function updateImages() {
+                // Get all current image URLs
+                const tab1ImageValue = document.getElementById('tab1Image').value;
+                const tab2ImageValue = document.getElementById('tab2Image').value;
+                
+                // Update the tab contents with images
+                document.getElementById('tab1').querySelector('p').insertAdjacentHTML('afterend', 
+                    `<img src="${tab1ImageValue}" alt="Tab image" class="tab-image">`);
+                
+                document.getElementById('tab2').querySelector('p').insertAdjacentHTML('afterend', 
+                    `<img src="${tab2ImageValue}" alt="Tab image" class="tab-image">`);
+                
+                // Update any additional tabs
+                for (let i = 3; i <= tabCount; i++) {
+                    if (document.getElementById(`tab${i}`)) {
+                        const tabImageValue = document.getElementById(`tab${i}Image`).value;
+                        if (tabImageValue) {
+                            document.getElementById(`tab${i}`).querySelector('p').insertAdjacentHTML('afterend', 
+                                `<img src="${tabImageValue}" alt="Tab image" class="tab-image">`);
+                        }
+                    }
+                }
+            }
+            
+            // Function to update borders
+            function updateBorders() {
+                const style = borderStyle.value;
+                const width = borderWidth.value;
+                const previewContainer = document.querySelector('.preview-container');
+                
+                previewContainer.style.borderStyle = style;
+                previewContainer.style.borderWidth = width;
+            }
+            
+            // Helper function to update tab content including images
+            function updateTabContent(tabId, content, imageUrl) {
+                const tabElement = document.getElementById(tabId);
+                if (!tabElement) return;
+                
+                // Clear existing content
+                tabElement.innerHTML = '';
+                
+                // Add the text content
+                const textElement = document.createElement('p');
+                textElement.innerHTML = content.replace(/\n/g, '<br>');
+                tabElement.appendChild(textElement);
+                
+                // Add image if URL is provided
+                if (imageUrl && imageUrl.trim() !== '') {
+                    const imageElement = document.createElement('img');
+                    imageElement.src = imageUrl;
+                    imageElement.alt = "Tab image";
+                    imageElement.className = "tab-image";
+                    tabElement.appendChild(imageElement);
+                }
+            }
+            
+            // Function to update the preview
+            function updatePreview() {
+                // Get current values from all fields
+                const tab1TitleValue = tab1Title.value;
+                const tab1ContentValue = tab1Content.value;
+                const tab1ImageValue = tab1Image.value;
+                
+                const tab2TitleValue = tab2Title.value;
+                const tab2ContentValue = tab2Content.value;
+                const tab2ImageValue = tab2Image.value;
+                
+                // Update tab titles
+                const tabButtons = document.querySelectorAll('.itab');
+                tabButtons[0].textContent = tab1TitleValue;
+                tabButtons[1].textContent = tab2TitleValue;
+                
+                for (let i = 3; i <= tabCount; i++) {
+                    const tabTitleField = document.getElementById(`tab${i}Title`);
+                    if (tabTitleField && tabButtons[i-1]) {
+                        tabButtons[i-1].textContent = tabTitleField.value;
+                    }
+                }
+                
+                // Update tab contents
+                updateTabContent('tab1', tab1ContentValue, tab1ImageValue);
+                updateTabContent('tab2', tab2ContentValue, tab2ImageValue);
+                
+                for (let i = 3; i <= tabCount; i++) {
+                    const contentField = document.getElementById(`tab${i}Content`);
+                    const imageField = document.getElementById(`tab${i}Image`);
+                    
+                    if (contentField && imageField) {
+                        updateTabContent(`tab${i}`, contentField.value, imageField.value);
+                    }
+                }
+                
+                // Update button
+                itabsLinkButton.textContent = buttonText.value;
+                itabsLinkButton.href = buttonUrl.value;
+                
+                // Show/hide button based on whether text is provided
+                itabsLinkButton.style.display = buttonText.value.trim() ? 'inline-block' : 'none';
+            }
+            
+            // Function to adjust color brightness
+            function generateCode() {
+                // Get all the current tab data
+                const tabs = [];
+                
+                // Add the first two tabs
+                tabs.push({
+                    title: tab1Title.value,
+                    content: tab1Content.value,
+                    image: tab1Image.value
+                });
+                
+                tabs.push({
+                    title: tab2Title.value,
+                    content: tab2Content.value,
+                    image: tab2Image.value
+                });
+                
+                // Add any additional tabs
+                for (let i = 3; i <= tabCount; i++) {
+                    const tabTitleField = document.getElementById(`tab${i}Title`);
+                    const tabContentField = document.getElementById(`tab${i}Content`);
+                    const tabImageField = document.getElementById(`tab${i}Image`);
+                    
+                    if (tabTitleField && tabContentField) {
+                        tabs.push({
+                            title: tabTitleField.value,
+                            content: tabContentField.value,
+                            image: tabImageField ? tabImageField.value : ''
+                        });
+                    }
+                }
+                
+                // Get button data
+                const buttonData = {
+                    text: buttonText.value,
+                    url: buttonUrl.value
+                };
+                
+                // Get style preferences
+                const iconText = triggerIcon.value;
+                const primaryColorValue = primaryColor;
+                const borderStyleValue = borderStyle.value;
+                const borderWidthValue = borderWidth.value;
+                
+                // Generate HTML structure
+                let html = `<!-- iTabs - Start -->
+<div class="itabs-container" id="itabs-container-${Date.now().toString(36)}">
+    <div class="itabs-trigger">
+        <span class="itabs-trigger-icon">${iconText}</span>
+    </div>
+    <div class="itabs-content">
+        <div class="itabs-tabs">
+`;
+
+                // Add tab buttons
+                tabs.forEach((tab, index) => {
+                    html += `            <button class="itabs-tab${index === 0 ? ' active' : ''}" data-tab="tab-${index + 1}">${tab.title}</button>\n`;
+                });
+
+                html += `        </div>
+        
+`;
+
+                // Add tab content
+                tabs.forEach((tab, index) => {
+                    html += `        <div class="itabs-tab-content${index === 0 ? ' active' : ''}" id="tab-${index + 1}">
+            <div class="itabs-tab-text">${tab.content.replace(/\n/g, '<br>')}</div>
+${tab.image ? `            <img src="${tab.image}" alt="${tab.title}" class="itabs-tab-image">` : ''}
+        </div>
+        
+`;
+                });
+
+                // Add button if provided
+                if (buttonData.text.trim()) {
+                    html += `        <div class="itabs-button-container">
+            <a href="${buttonData.url}" class="itabs-button" target="_blank">${buttonData.text}</a>
+        </div>
+`;
+                }
+
+                html += `    </div>
+</div>
+
+<style>
+    /* iTabs Styles */
+    .itabs-container {
+        position: relative;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        max-width: 100%;
+        margin: 20px 0;
+        border: ${borderWidthValue} ${borderStyleValue} ${primaryColorValue};
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .itabs-trigger {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+    
+    .itabs-trigger-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background-color: ${primaryColorValue};
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+        cursor: pointer;
+        font-style: italic;
+    }
+    
+    .itabs-content {
+        background: white;
+    }
+    
+    .itabs-tabs {
+        display: flex;
+        background-color: #f1f5f9;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .itabs-tab {
+        padding: 15px;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-weight: 600;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .itabs-tab:hover {
+        color: ${primaryColorValue};
+    }
+    
+    .itabs-tab.active {
+        color: ${primaryColorValue};
+        background: white;
+        border-bottom: 3px solid ${primaryColorValue};
+    }
+    
+    .itabs-tab-content {
+        display: none;
+        padding: 20px;
+        animation: itabs-fadeIn 0.5s;
+    }
+    
+    .itabs-tab-content.active {
+        display: block;
+    }
+    
+    .itabs-tab-image {
+        max-width: 100%;
+        height: auto;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    
+    .itabs-button-container {
+        padding: 0 20px 20px;
+    }
+    
+    .itabs-button {
+        display: inline-block;
+        padding: 8px 16px;
+        background: ${primaryColorValue};
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+    
+    @keyframes itabs-fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .itabs-tabs {
+            flex-wrap: wrap;
+        }
+        
+        .itabs-tab {
+            flex-grow: 1;
+            text-align: center;
+            padding: 10px;
+        }
+    }
+</style>
+
+<script>
+    (function() {
+        // Get the container and all tabs
+        const container = document.getElementById('itabs-container-${Date.now().toString(36)}');
+        const tabs = container.querySelectorAll('.itabs-tab');
+        
+        // Add click event to each tab
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Get the tab ID
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and tab contents
+                tabs.forEach(t => t.classList.remove('active'));
+                const tabContents = container.querySelectorAll('.itabs-tab-content');
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to current tab and tab content
+                this.classList.add('active');
+                container.querySelector('#' + tabId).classList.add('active');
+            });
+        });
+    })();
+</script>
+<!-- iTabs - End -->`;
+
+                return html;
+            }
+            function adjustColor(color, amount) {
+                return '#' + color.replace(/^#/, '').replace(/../g, color => ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+            }
+            
+            // Initialize colors, borders, and trigger icon
+            updateColors();
+            updateBorders();
+            updateTriggerIcon();
+        });
+    </script>
+</body>
+</html>
+<br>
+<br>
 <!-- ROTATING EMOJI WELL WIDGET - RIGHT SIDE FLOATING -->
 <!-- Copy and paste this entire code into your website -->
 
